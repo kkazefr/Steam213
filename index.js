@@ -20,47 +20,86 @@ app.get('/', (req, res) => {
     </head>
     <body>
         <!-- Header -->
-        <header class="header">
-            <div class="container">
-                <div class="nav">
-                    <div class="logo">
-                        <i class="fas fa-fire"></i>
-                        <span>Steam213</span>
+       <!-- Header -->
+<!-- Header -->
+<!-- Header -->
+<header class="header">
+    <div class="container">
+        <div class="nav">
+         <div class="logo">
+             <img src="/images/logo.png" alt="Steam213 Logo" class="logo-image">
+                <span>Steam213</span>
+            </div>
+            
+            <div class="nav-right">
+                <button class="nav-btn home-btn" onclick="scrollToTop()">
+                    <i class="fas fa-home"></i>
+                    <span>Home</span>
+                </button>
+                
+                <div class="dropdown">
+                    <button class="nav-btn categories-btn">
+                        <i class="fas fa-th-large"></i>
+                        <span>Categories</span>
+                        <i class="fas fa-chevron-down"></i>
+                    </button>
+                    <div class="dropdown-content">
+                        <a href="#" onclick="scrollToGenre('action')">Action Games</a>
+                        <a href="#" onclick="scrollToGenre('rpg')">RPG Games</a>
+                        <a href="#" onclick="scrollToGenre('adventure')">Adventure Games</a>
                     </div>
-                    <div class="search-bar">
+                </div>
+
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                
+                <a href="https://discord.gg/BRwHfHFD" class="discord-btn" target="_blank">
+                    <i class="fab fa-discord"></i>
+                </a>
+
+                <div class="search-container">
+                    <button class="search-toggle" id="searchToggle">
+                        <i class="fas fa-search"></i>
+                    </button>
+                    <div class="search-bar" id="searchBar">
                         <input type="text" placeholder="Search games...">
-                        <button><i class="fas fa-search"></i></button>
+                        <button class="search-submit"><i class="fas fa-search"></i></button>
                     </div>
                 </div>
             </div>
-        </header>
+        </div>
+    </div>
+</header>
 
         <!-- Main Content -->
         <main class="main">
             <div class="container">
                 <!-- Popular Games Carousel -->
-                <div class="carousel-section">
-                    <div class="carousel-header">
-                        <h2>Popular Games Now</h2>
-                        <div class="carousel-controls">
-                            <button class="carousel-btn prev-btn">
-                                <i class="fas fa-chevron-left"></i>
-                            </button>
-                            <button class="carousel-btn next-btn">
-                                <i class="fas fa-chevron-right"></i>
-                            </button>
-                        </div>
-                    </div>
-                    <div class="carousel-container">
-                        <div class="carousel-track" id="carouselTrack">
-                            <!-- Carousel items will be loaded here -->
-                        </div>
-                    </div>
-                </div>
+               <!-- Popular Games Vertical List -->
+                <!-- Popular Games Carousel -->
+<div class="carousel-section">
+    <div class="carousel-header">
+        <h2>Popular Games Now</h2>
+        <div class="carousel-controls">
+            <button class="carousel-btn prev-btn">
+                <i class="fas fa-chevron-left"></i>
+            </button>
+            <button class="carousel-btn next-btn">
+                <i class="fas fa-chevron-right"></i>
+            </button>
+        </div>
+    </div>
+    <div class="carousel-container">
+        <div class="carousel-track" id="carouselTrack">
+            <!-- Carousel items will be loaded here -->
+        </div>
+    </div>
+</div>
 
-                <!-- All Games Grid -->
-                <div class="games-grid" id="gamesGrid">
-                    <!-- Games will be loaded here by JavaScript -->
+                <!-- Genre Sections -->
+                <div class="genre-sections" id="genreSections">
+                    <!-- Genre sections will be loaded here by JavaScript -->
                 </div>
             </div>
         </main>

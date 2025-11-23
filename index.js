@@ -38,7 +38,27 @@ app.get('/', (req, res) => {
         <!-- Main Content -->
         <main class="main">
             <div class="container">
-                <h1 class="page-title">Trending Games</h1>
+                <!-- Popular Games Carousel -->
+                <div class="carousel-section">
+                    <div class="carousel-header">
+                        <h2>Popular Games Now</h2>
+                        <div class="carousel-controls">
+                            <button class="carousel-btn prev-btn">
+                                <i class="fas fa-chevron-left"></i>
+                            </button>
+                            <button class="carousel-btn next-btn">
+                                <i class="fas fa-chevron-right"></i>
+                            </button>
+                        </div>
+                    </div>
+                    <div class="carousel-container">
+                        <div class="carousel-track" id="carouselTrack">
+                            <!-- Carousel items will be loaded here -->
+                        </div>
+                    </div>
+                </div>
+
+                <!-- All Games Grid -->
                 <div class="games-grid" id="gamesGrid">
                     <!-- Games will be loaded here by JavaScript -->
                 </div>

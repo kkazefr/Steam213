@@ -2,9 +2,9 @@
 const games = [
     {
         id: 1,
-        title: "GTA V",
+        title: "Cyber Adventure",
         description: "Futuristic RPG with amazing graphics",
-        image: "/images/gtaV.jpg", 
+        image: "/images/cyber-adventure.jpg",
         isPopular: true
     },
     {
@@ -19,7 +19,7 @@ const games = [
         title: "Dragon Quest",
         description: "Fantasy RPG with dragons and magic",
         image: "/images/dragon-quest.jpg",
-        isPopular: false
+        isPopular: true
     },
     {
         id: 4,
@@ -40,7 +40,7 @@ const games = [
         title: "Puzzle Masters",
         description: "Challenge your brain with puzzles",
         image: "/images/puzzle-masters.jpg",
-        isPopular: true
+        isPopular: false
     },
     {
         id: 7,
@@ -54,7 +54,7 @@ const games = [
         title: "Magic Kingdom",
         description: "Build your magical empire",
         image: "/images/magic-kingdom.jpg",
-        isPopular: true
+        isPopular: false
     },
     {
         id: 9,
@@ -68,37 +68,89 @@ const games = [
         title: "Wild West",
         description: "Cowboy adventure in the west",
         image: "/images/wild-west.jpg",
-        isPopular: true
+        isPopular: false
+    },
+    {
+        id: 11,
+        title: "Cyber Punk City",
+        description: "Neon-lit urban adventure",
+        image: "/images/cyber-punk.jpg",
+        isPopular: false
+    },
+    {
+        id: 12,
+        title: "Ancient Empire",
+        description: "Build your ancient civilization",
+        image: "/images/ancient-empire.jpg",
+        isPopular: false
     }
 ];
 
-// Function to create game cards
-function createGameCard(game) {
-    const popularBadge = game.isPopular ? '<div class="popular-badge">POPULAR NOW!</div>' : '';
-    
+// Carousel functionality
+let currentSlide = 0;
+
+function createCarouselItem(game) {
     return `
-        <div class="game-card" data-game-id="${game.id}">
-            <div class="game-image">
-                ${game.image ? 
-                    `<img src="${game.image}" alt="${game.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
-                     <div class="placeholder-icon" style="display: none;">
-                         <i class="fas fa-gamepad"></i>
-                     </div>` :
-                    `<div class="placeholder-icon">
-                         <i class="fas fa-gamepad"></i>
-                     </div>`
-                }
-            </div>
-            <div class="game-info">
-                <h3 class="game-title">${game.title}</h3>
-                <p class="game-description">${game.description}</p>
-                ${popularBadge}
+        <div class="carousel-item">
+            <div class="carousel-game" data-game-id="${game.id}">
+                <div class="carousel-game-image">
+                    ${game.image ? 
+                        `<img src="${game.image}" alt="${game.title}" onerror="this.style.display='none';" />` :
+                        `<div class="placeholder-icon"><i class="fas fa-gamepad"></i></div>`
+                    }
+                    <div class="carousel-game-title">${game.title}</div>
+                </div>
             </div>
         </div>
     `;
 }
 
-// Function to load games
+function createGameCard(game) {
+    return `
+        <div class="game-card" data-game-id="${game.id}">
+            <div class="game-image">
+                ${game.image ? 
+                    `<img src="${game.image}" alt="${game.title}" onerror="this.style.display='none';" />` :
+                    `<div class="placeholder-icon"><i class="fas fa-gamepad"></i></div>`
+                }
+                <div class="game-title-overlay">${game.title}</div>
+            </div>
+        </div>
+    `;
+}
+
+function loadCarousel() {
+    const popularGames = games.filter(game => game.isPopular);
+    const carouselTrack = document.getElementById('carouselTrack');
+    
+    // Duplicate items for infinite loop
+    const carouselItems = [...popularGames, ...popularGames, ...popularGames]
+        .map(game => createCarouselItem(game)).join('');
+    
+    carouselTrack.innerHTML = carouselItems;
+    updateCarousel();
+}
+
+function updateCarousel() {
+    const carouselTrack = document.getElementById('carouselTrack');
+    const itemWidth = 25; // 25% per item (4 items visible)
+    const translateX = -currentSlide * itemWidth;
+    carouselTrack.style.transform = `translateX(${translateX}%)`;
+}
+
+function nextSlide() {
+    const popularGames = games.filter(game => game.isPopular).length;
+    currentSlide = (currentSlide + 1) % popularGames;
+    updateCarousel();
+}
+
+function prevSlide() {
+    const popularGames = games.filter(game => game.isPopular).length;
+    currentSlide = (currentSlide - 1 + popularGames) % popularGames;
+    updateCarousel();
+}
+
+// Function to load games grid
 function loadGames() {
     const gamesGrid = document.getElementById('gamesGrid');
     gamesGrid.innerHTML = games.map(game => createGameCard(game)).join('');
@@ -112,8 +164,7 @@ function setupSearch() {
     function performSearch() {
         const searchTerm = searchInput.value.toLowerCase();
         const filteredGames = games.filter(game => 
-            game.title.toLowerCase().includes(searchTerm) ||
-            game.description.toLowerCase().includes(searchTerm)
+            game.title.toLowerCase().includes(searchTerm)
         );
         
         const gamesGrid = document.getElementById('gamesGrid');
@@ -131,18 +182,26 @@ function setupSearch() {
 
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
+    loadCarousel();
     loadGames();
     setupSearch();
     
-    // Add some interactive effects
-    const gameCards = document.querySelectorAll('.game-card');
-    gameCards.forEach(card => {
-        card.addEventListener('mouseenter', function() {
-            this.style.transform = 'translateY(-10px)';
-        });
-        
-        card.addEventListener('mouseleave', function() {
-            this.style.transform = 'translateY(0)';
-        });
+    // Carousel controls
+    document.querySelector('.next-btn').addEventListener('click', nextSlide);
+    document.querySelector('.prev-btn').addEventListener('click', prevSlide);
+    
+    // Auto-advance carousel
+    setInterval(nextSlide, 5000);
+    
+    // Add click handlers for games
+    document.addEventListener('click', function(e) {
+        const gameCard = e.target.closest('.game-card, .carousel-game');
+        if (gameCard) {
+            const gameId = gameCard.dataset.gameId;
+            const game = games.find(g => g.id == gameId);
+            if (game) {
+                alert(`Selected: ${game.title}\n\nThis would navigate to the game page in a real application.`);
+            }
+        }
     });
 });

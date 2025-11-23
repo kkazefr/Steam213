@@ -2,9 +2,9 @@
 const games = [
     {
         id: 1,
-        title: "Cyber Adventure",
+        title: "GTA V",
         description: "Futuristic RPG with amazing graphics",
-        image: "/images/cyber-adventure.jpg", // You can replace this with your own images
+        image: "/images/gtaV.jpg", // You can replace this with your own images
         isPopular: true
     },
     {

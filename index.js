@@ -14,7 +14,7 @@ app.get('/', (req, res) => {
     <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <title>GameHub - Download Amazing Games</title>
+        <title>Steam213 - Download Amazing Games</title>
         <link rel="stylesheet" href="/css/style.css">
         <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
     </head>
@@ -24,8 +24,8 @@ app.get('/', (req, res) => {
             <div class="container">
                 <div class="nav">
                     <div class="logo">
-                        <i class="fas fa-gamepad"></i>
-                        <span>GameHub</span>
+                        <i class="fas fa-fire"></i>
+                        <span>Steam213</span>
                     </div>
                     <div class="search-bar">
                         <input type="text" placeholder="Search games...">
@@ -38,7 +38,7 @@ app.get('/', (req, res) => {
         <!-- Main Content -->
         <main class="main">
             <div class="container">
-                <h1 class="page-title">Popular Games</h1>
+                <h1 class="page-title">Trending Games</h1>
                 <div class="games-grid" id="gamesGrid">
                     <!-- Games will be loaded here by JavaScript -->
                 </div>
@@ -50,8 +50,8 @@ app.get('/', (req, res) => {
             <div class="container">
                 <div class="footer-content">
                     <div class="footer-section">
-                        <h3>GameHub</h3>
-                        <p>Your ultimate destination for amazing games. Download and play the best titles for free!</p>
+                        <h3>Steam213</h3>
+                        <p>Your ultimate destination for amazing games. Discover the hottest titles trending right now!</p>
                     </div>
                     <div class="footer-section">
                         <h4>Quick Links</h4>
@@ -68,7 +68,7 @@ app.get('/', (req, res) => {
                     </div>
                 </div>
                 <div class="footer-bottom">
-                    <p>&copy; 2024 GameHub. All rights reserved.</p>
+                    <p>&copy; 2024 Steam213. All rights reserved.</p>
                 </div>
             </div>
         </footer>

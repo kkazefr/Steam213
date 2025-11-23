@@ -1,80 +1,98 @@
-// Sample games data
+// Sample games data with image support
 const games = [
     {
         id: 1,
         title: "Cyber Adventure",
         description: "Futuristic RPG with amazing graphics",
-        icon: "fas fa-robot"
+        image: "/images/cyber-adventure.jpg", // You can replace this with your own images
+        isPopular: true
     },
     {
         id: 2,
         title: "Space Explorers",
         description: "Explore the universe in this epic adventure",
-        icon: "fas fa-rocket"
+        image: "/images/space-explorers.jpg",
+        isPopular: true
     },
     {
         id: 3,
         title: "Dragon Quest",
         description: "Fantasy RPG with dragons and magic",
-        icon: "fas fa-dragon"
+        image: "/images/dragon-quest.jpg",
+        isPopular: false
     },
     {
         id: 4,
         title: "Racing Extreme",
         description: "High-speed racing with super cars",
-        icon: "fas fa-car"
+        image: "/images/racing-extreme.jpg",
+        isPopular: true
     },
     {
         id: 5,
         title: "Zombie Survival",
         description: "Survive the zombie apocalypse",
-        icon: "fas fa-biohazard"
+        image: "/images/zombie-survival.jpg",
+        isPopular: false
     },
     {
         id: 6,
         title: "Puzzle Masters",
         description: "Challenge your brain with puzzles",
-        icon: "fas fa-puzzle-piece"
+        image: "/images/puzzle-masters.jpg",
+        isPopular: true
     },
     {
         id: 7,
         title: "Football Pro",
         description: "Realistic football simulation",
-        icon: "fas fa-futbol"
+        image: "/images/football-pro.jpg",
+        isPopular: false
     },
     {
         id: 8,
         title: "Magic Kingdom",
         description: "Build your magical empire",
-        icon: "fas fa-crown"
+        image: "/images/magic-kingdom.jpg",
+        isPopular: true
     },
     {
         id: 9,
         title: "Ocean Explorer",
         description: "Discover deep sea mysteries",
-        icon: "fas fa-water"
+        image: "/images/ocean-explorer.jpg",
+        isPopular: false
     },
     {
         id: 10,
         title: "Wild West",
         description: "Cowboy adventure in the west",
-        icon: "fas fa-hat-cowboy"
+        image: "/images/wild-west.jpg",
+        isPopular: true
     }
 ];
 
 // Function to create game cards
 function createGameCard(game) {
+    const popularBadge = game.isPopular ? '<div class="popular-badge">POPULAR NOW!</div>' : '';
+    
     return `
         <div class="game-card" data-game-id="${game.id}">
             <div class="game-image">
-                <i class="${game.icon}"></i>
+                ${game.image ? 
+                    `<img src="${game.image}" alt="${game.title}" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+                     <div class="placeholder-icon" style="display: none;">
+                         <i class="fas fa-gamepad"></i>
+                     </div>` :
+                    `<div class="placeholder-icon">
+                         <i class="fas fa-gamepad"></i>
+                     </div>`
+                }
             </div>
             <div class="game-info">
                 <h3 class="game-title">${game.title}</h3>
                 <p class="game-description">${game.description}</p>
-                <button class="download-btn" onclick="downloadGame(${game.id})">
-                    <i class="fas fa-download"></i> Download Now
-                </button>
+                ${popularBadge}
             </div>
         </div>
     `;
@@ -84,16 +102,6 @@ function createGameCard(game) {
 function loadGames() {
     const gamesGrid = document.getElementById('gamesGrid');
     gamesGrid.innerHTML = games.map(game => createGameCard(game)).join('');
-}
-
-// Download game function
-function downloadGame(gameId) {
-    const game = games.find(g => g.id === gameId);
-    if (game) {
-        alert(`Starting download: ${game.title}\n\nThis is a demo. In a real website, the download would begin now!`);
-        // In a real application, you would redirect to actual download link
-        // window.location.href = `/download/${gameId}`;
-    }
 }
 
 // Search functionality

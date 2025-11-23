@@ -2,86 +2,86 @@
 const games = [
     {
         id: 1,
-        title: "Cyber Adventure",
-        description: "Futuristic RPG with amazing graphics",
-        image: "/images/cyber-adventure.jpg",
+        title: "Grand Theft Auto V",
+        description: "Grand Theft Auto V is an open-world action-adventure game set in Los Santos.",
+        image: "/images/gtaV.jpg",
         isPopular: true
     },
     {
         id: 2,
-        title: "Space Explorers",
-        description: "Explore the universe in this epic adventure",
-        image: "/images/space-explorers.jpg",
+        title: "Forza Horizon 5 Premium Edition",
+        description: "Open-world racing game set in Mexico with extra cars and expansions",
+        image: "/images/forza5.jpg",
         isPopular: true
     },
     {
         id: 3,
-        title: "Dragon Quest",
-        description: "Fantasy RPG with dragons and magic",
-        image: "/images/dragon-quest.jpg",
+        title: "Cyberpunk 2077",
+        description: "Futuristic open-world RPG in Night City.",
+        image: "/images/cyberpunk2077.jpg",
         isPopular: true
     },
     {
         id: 4,
-        title: "Racing Extreme",
-        description: "High-speed racing with super cars",
-        image: "/images/racing-extreme.jpg",
+        title: "Red Dead Redemption 2",
+        description: "Epic open-world Western adventure.",
+        image: "/images/reddead2.jpg",
         isPopular: true
     },
     {
         id: 5,
-        title: "Zombie Survival",
-        description: "Survive the zombie apocalypse",
-        image: "/images/zombie-survival.jpg",
+        title: "Ghost Of Tsushima",
+        description: "Open-world samurai adventure in feudal Japan",
+        image: "/images/ghostoftsushima.jpg",
         isPopular: false
     },
     {
         id: 6,
-        title: "Puzzle Masters",
-        description: "Challenge your brain with puzzles",
-        image: "/images/puzzle-masters.jpg",
+        title: "Grand Theft Auto: San Andreas",
+        description: "Open-world crime adventure in San Andreas.",
+        image: "/images/sanandreas.jpeg",
         isPopular: false
     },
     {
         id: 7,
-        title: "Football Pro",
-        description: "Realistic football simulation",
-        image: "/images/football-pro.jpg",
+        title: "God of War Ragnarök",
+        description: "Mythical action-adventure with Kratos in Norse realms.",
+        image: "/images/godofwar.jpg",
         isPopular: false
     },
     {
         id: 8,
-        title: "Magic Kingdom",
-        description: "Build your magical empire",
-        image: "/images/magic-kingdom.jpg",
+        title: "Grand Theft Auto IV",
+        description: "Open-world crime story in Liberty City.",
+        image: "/images/gta4.jpeg",
         isPopular: false
     },
     {
         id: 9,
-        title: "Ocean Explorer",
-        description: "Discover deep sea mysteries",
-        image: "/images/ocean-explorer.jpg",
+        title: "Call of Duty Black ops 3",
+        description: "Futuristic first-person shooter with advanced combat.",
+        image: "/images/blackops3.jpg",
         isPopular: false
     },
     {
         id: 10,
-        title: "Wild West",
-        description: "Cowboy adventure in the west",
-        image: "/images/wild-west.jpg",
+        title: "Resident Evil 4 Remake",
+        description: "Survival horror adventure to rescue the president daughter",
+        image: "/images/residentevil4.jpg",
         isPopular: false
     },
     {
         id: 11,
-        title: "Cyber Punk City",
-        description: "Neon-lit urban adventure",
-        image: "/images/cyber-punk.jpg",
+        title: "HITMAN 3",
+        description: "Stealth action game as Agent 47 completing global assassinations.",
+        image: "/images/hitman3.png",
         isPopular: false
     },
     {
         id: 12,
-        title: "Ancient Empire",
-        description: "Build your ancient civilization",
-        image: "/images/ancient-empire.jpg",
+        title: "Call of Duty: Black Ops 6",
+        description: "FPS with 90s setting, multiplayer, and Zombies mode.",
+        image: "/images/blackops6.png",
         isPopular: false
     }
 ];

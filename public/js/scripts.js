@@ -1,50 +1,6 @@
-// Sample games data with genres
-const games = [
-    // Action Games (12)
-    { id: 1, title: "Grand Theft Auto V", genre: "action", image: "/images/gtaV.jpg" },
-    { id: 2, title: "Grand Thet Auto: Sand Anderas", genre: "action", image: "/images/sanandreas.jpeg" },
-    { id: 3, title: "Red Dead Redemption 2", genre: "action", image: "/images/reddead2.jpg" },
-    { id: 4, title: "Cyberpunk2077", genre: "action", image: "/images/cyberpunk2077.jpg" },
-    { id: 5, title: "Forza Horizon 5", genre: "action", image: "/images/forza5.jpg" },
-    { id: 6, title: "Ghost of Tsushima", genre: "action", image: "/images/ghostoftsushima.jpg" },
-    { id: 7, title: "Resident evil 4", genre: "action", image: "/images/residentevil4.jpg" },
-    { id: 8, title: "Cyber Strike", genre: "action", image: "/images/cyber-strike.jpg" },
-    { id: 9, title: "Space Marines", genre: "action", image: "/images/space-marines.jpg" },
-    { id: 10, title: "Dragon Slayer", genre: "action", image: "/images/dragon-slayer.jpg" },
-    { id: 11, title: "Racing Pro", genre: "action", image: "/images/racing-pro.jpg" },
-    { id: 12, title: "Zombie Outbreak", genre: "action", image: "/images/zombie-outbreak.jpg" },
-    
-    // RPG Games (12)
-    { id: 13, title: "Magic Kingdom", genre: "rpg", image: "/images/magic-kingdom.jpg" },
-    { id: 14, title: "Fantasy World", genre: "rpg", image: "/images/fantasy-world.jpg" },
-    { id: 15, title: "Ancient Empire", genre: "rpg", image: "/images/ancient-empire.jpg" },
-    { id: 16, title: "Dragon Age", genre: "rpg", image: "/images/dragon-age.jpg" },
-    { id: 17, title: "Wizard Academy", genre: "rpg", image: "/images/wizard-academy.jpg" },
-    { id: 18, title: "Kingdom Hearts", genre: "rpg", image: "/images/kingdom-hearts.jpg" },
-    { id: 19, title: "Mythic Quest", genre: "rpg", image: "/images/mythic-quest.jpg" },
-    { id: 20, title: "Epic Journey", genre: "rpg", image: "/images/epic-journey.jpg" },
-    { id: 21, title: "Magic Realms", genre: "rpg", image: "/images/magic-realms.jpg" },
-    { id: 22, title: "Fantasy Quest", genre: "rpg", image: "/images/fantasy-quest.jpg" },
-    { id: 23, title: "Ancient Magic", genre: "rpg", image: "/images/ancient-magic.jpg" },
-    { id: 24, title: "Dragon Lore", genre: "rpg", image: "/images/dragon-lore.jpg" },
-    
-    // Adventure Games (12)
-    { id: 25, title: "Ocean Explorer", genre: "adventure", image: "/images/ocean-explorer.jpg" },
-    { id: 26, title: "Wild West", genre: "adventure", image: "/images/wild-west.jpg" },
-    { id: 27, title: "Jungle Trek", genre: "adventure", image: "/images/jungle-trek.jpg" },
-    { id: 28, title: "Mountain Quest", genre: "adventure", image: "/images/mountain-quest.jpg" },
-    { id: 29, title: "Desert Mystery", genre: "adventure", image: "/images/desert-mystery.jpg" },
-    { id: 30, title: "Island Survival", genre: "adventure", image: "/images/island-survival.jpg" },
-    { id: 31, title: "Arctic Expedition", genre: "adventure", image: "/images/arctic-expedition.jpg" },
-    { id: 32, title: "Deep Sea Dive", genre: "adventure", image: "/images/deep-sea-dive.jpg" },
-    { id: 33, title: "Forest Adventure", genre: "adventure", image: "/images/forest-adventure.jpg" },
-    { id: 34, title: "Cave Explorer", genre: "adventure", image: "/images/cave-explorer.jpg" },
-    { id: 35, title: "Sky Journey", genre: "adventure", image: "/images/sky-journey.jpg" },
-    { id: 36, title: "Time Traveler", genre: "adventure", image: "/images/time-traveler.jpg" }
-];
-
-// Popular games for carousel
-const popularGames = [1, 2, 3, 4, 13, 14, 25, 26];
+// Use the data passed from the server instead of hardcoded arrays
+const games = window.ALL_GAMES || [];
+const popularGames = window.POPULAR_GAME_IDS || [];
 
 // Carousel functionality
 let currentSlide = 0;
@@ -70,8 +26,19 @@ function createCarouselItem(game) {
 function loadCarousel() {
     const popularGameObjects = popularGames.map(id => 
         games.find(game => game.id === id)
-    );
+    ).filter(game => game); // Filter out undefined games
+    
     const carouselTrack = document.getElementById('carouselTrack');
+    
+    if (popularGameObjects.length === 0) {
+        carouselTrack.innerHTML = `
+            <div style="text-align: center; padding: 2rem; color: var(--medium-gray); width: 100%;">
+                <i class="fas fa-gamepad" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                <p>No popular games found</p>
+            </div>
+        `;
+        return;
+    }
     
     // Duplicate items for infinite loop
     const carouselItems = [...popularGameObjects, ...popularGameObjects, ...popularGameObjects]
@@ -83,24 +50,29 @@ function loadCarousel() {
 
 function updateCarousel() {
     const carouselTrack = document.getElementById('carouselTrack');
-    const itemWidth = 25; // 25% per item (4 items visible)
+    const itemWidth = 25; 
     const translateX = -currentSlide * itemWidth;
     carouselTrack.style.transform = `translateX(${translateX}%)`;
 }
 
 function nextSlide() {
     const totalSlides = popularGames.length;
+    if (totalSlides === 0) return;
+    
     currentSlide = (currentSlide + 1) % totalSlides;
     updateCarousel();
 }
 
 function prevSlide() {
     const totalSlides = popularGames.length;
+    if (totalSlides === 0) return;
+    
     currentSlide = (currentSlide - 1 + totalSlides) % totalSlides;
     updateCarousel();
 }
 
 function startAutoSlide() {
+    if (popularGames.length === 0) return;
     autoSlideInterval = setInterval(nextSlide, 5000);
 }
 
@@ -135,6 +107,10 @@ function showSearchView(searchTerm, filteredGames) {
         <div class="genre-section">
             <div class="genre-header">
                 <h2 class="genre-title">Search Results for "${searchTerm}"</h2>
+                <button class="nav-btn" onclick="showMainView()" style="margin: 0;">
+                    <i class="fas fa-arrow-left"></i>
+                    <span>Back to All Games</span>
+                </button>
             </div>
             <div class="genre-grid">
                 ${filteredGames.map(game => createGameCard(game)).join('')}
@@ -143,6 +119,9 @@ function showSearchView(searchTerm, filteredGames) {
                 <div style="text-align: center; padding: 2rem; color: var(--medium-gray);">
                     <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
                     <p>No games found matching "${searchTerm}"</p>
+                    <button class="show-more-btn" onclick="showMainView()" style="margin-top: 1rem;">
+                        View All Games
+                    </button>
                 </div>
             ` : ''}
         </div>
@@ -168,10 +147,25 @@ function createGenreSection(genre, title) {
     const visibleGames = genreGames.slice(0, 12);
     const hiddenGames = genreGames.slice(12);
     
+    if (genreGames.length === 0) {
+        return `
+            <div class="genre-section" data-genre="${genre}">
+                <div class="genre-header">
+                    <h2 class="genre-title">${title}</h2>
+                </div>
+                <div style="text-align: center; padding: 2rem; color: var(--medium-gray);">
+                    <i class="fas fa-gamepad" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>No ${title.toLowerCase()} available</p>
+                </div>
+            </div>
+        `;
+    }
+    
     return `
         <div class="genre-section" data-genre="${genre}">
             <div class="genre-header">
                 <h2 class="genre-title">${title}</h2>
+                <span class="game-count">${genreGames.length} games</span>
             </div>
             <div class="genre-grid">
                 ${visibleGames.map(game => createGameCard(game)).join('')}
@@ -181,7 +175,7 @@ function createGenreSection(genre, title) {
                     ${hiddenGames.map(game => createGameCard(game)).join('')}
                 </div>
                 <button class="show-more-btn" onclick="toggleShowMore('${genre}')">
-                    Show More
+                    Show More (${hiddenGames.length}+)
                 </button>
             ` : ''}
         </div>
@@ -205,9 +199,13 @@ function toggleShowMore(genre) {
     const hiddenSection = document.getElementById(`hidden-${genre}`);
     const button = document.querySelector(`[data-genre="${genre}"] .show-more-btn`);
     
+    if (!hiddenSection || !button) return;
+    
     if (hiddenSection.classList.contains('show')) {
         hiddenSection.classList.remove('show');
-        button.textContent = 'Show More';
+        button.textContent = `Show More (${hiddenSection.children.length}+)`;
+        // Scroll to the section
+        hiddenSection.closest('.genre-section').scrollIntoView({ behavior: 'smooth' });
     } else {
         hiddenSection.classList.add('show');
         button.textContent = 'Show Less';
@@ -262,6 +260,24 @@ function setupSearch() {
     });
     
     searchSubmit.addEventListener('click', performSearch);
+    
+    // Add input event for real-time search (optional)
+    let searchTimeout;
+    searchInput.addEventListener('input', (e) => {
+        clearTimeout(searchTimeout);
+        const searchTerm = e.target.value.toLowerCase().trim();
+        
+        if (searchTerm.length >= 2) {
+            searchTimeout = setTimeout(() => {
+                const filteredGames = games.filter(game => 
+                    game.title.toLowerCase().includes(searchTerm)
+                );
+                showSearchView(searchTerm, filteredGames);
+            }, 300);
+        } else if (searchTerm === '') {
+            showMainView();
+        }
+    });
 }
 
 // Theme toggle functionality
@@ -288,7 +304,7 @@ function initTheme() {
     });
 }
 
-// Scroll to top function with animation - UPDATED
+// Scroll to top function with animation
 function scrollToTop() {
     const mainElement = document.querySelector('.main');
     mainElement.classList.add('smooth-scroll');
@@ -423,44 +439,79 @@ function setupCarouselHover() {
     }
 }
 
+// Loading state management
+function showLoadingState() {
+    const genreSections = document.getElementById('genreSections');
+    genreSections.innerHTML = `
+        <div style="text-align: center; padding: 2rem;">
+            <div class="loading-spinner"></div>
+            <p>Loading games...</p>
+        </div>
+    `;
+}
+
 // Initialize when page loads
 document.addEventListener('DOMContentLoaded', function() {
-    loadCarousel();
-    loadGenreSections();
-    setupSearch();
-    initTheme();
-    setupDropdownClose();
-    setupDropdownHover();
-    setupImageErrorHandling();
-    setupLogoErrorHandling();
-    setupCarouselHover();
+    // Show loading state initially
+    showLoadingState();
     
-    // Carousel controls
-    document.querySelector('.next-btn').addEventListener('click', nextSlide);
-    document.querySelector('.prev-btn').addEventListener('click', prevSlide);
-    
-    // Start auto slide
-    startAutoSlide();
-    
-    // Game selection handling
-    document.addEventListener('click', function(e) {
-        const gameCard = e.target.closest('.game-card, .carousel-game');
-        if (gameCard) {
-            const gameId = gameCard.dataset.gameId;
-            const game = games.find(g => g.id == gameId);
-            if (game) {
-                alert(`Selected: ${game.title}\n\nThis would navigate to the game page in a real application.`);
-            }
+    // Small delay to ensure DOM is ready and data is loaded
+    setTimeout(() => {
+        if (games.length === 0) {
+            console.warn('No games data loaded from server');
+            document.getElementById('genreSections').innerHTML = `
+                <div style="text-align: center; padding: 2rem; color: var(--medium-gray);">
+                    <i class="fas fa-exclamation-triangle" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>No games data available</p>
+                    <button class="show-more-btn" onclick="location.reload()" style="margin-top: 1rem;">
+                        Reload Page
+                    </button>
+                </div>
+            `;
+            return;
         }
-    });
+        
+        loadCarousel();
+        loadGenreSections();
+        setupSearch();
+        initTheme();
+        setupDropdownClose();
+        setupDropdownHover();
+        setupImageErrorHandling();
+        setupLogoErrorHandling();
+        setupCarouselHover();
+        
+        // Carousel controls
+        const nextBtn = document.querySelector('.next-btn');
+        const prevBtn = document.querySelector('.prev-btn');
+        
+        if (nextBtn) nextBtn.addEventListener('click', nextSlide);
+        if (prevBtn) prevBtn.addEventListener('click', prevSlide);
+        
+        // Start auto slide
+        startAutoSlide();
+        
+        console.log(`🎮 Loaded ${games.length} games from database`);
+        console.log(`🔥 ${popularGames.length} popular games in carousel`);
+    }, 100);
 });
 
-// Utility function to get game by ID (for future use)
+// Game selection handling - Navigate to game pages
+document.addEventListener('click', function(e) {
+    const gameCard = e.target.closest('.game-card, .carousel-game');
+    if (gameCard) {
+        const gameId = gameCard.dataset.gameId;
+        // Navigate to game page
+        window.location.href = `/game/${gameId}`;
+    }
+});
+
+// Utility function to get game by ID
 function getGameById(gameId) {
     return games.find(game => game.id === parseInt(gameId));
 }
 
-// Utility function to get games by genre (for future use)
+// Utility function to get games by genre
 function getGamesByGenre(genre) {
     return games.filter(game => game.genre === genre);
 }
@@ -469,6 +520,43 @@ function getGamesByGenre(genre) {
 window.addEventListener('beforeunload', function() {
     stopAutoSlide();
 });
+
+// Add CSS for loading spinner (injected dynamically)
+const loadingStyles = `
+.loading-spinner {
+    border: 3px solid var(--mint-cream);
+    border-top: 3px solid var(--medium-blue);
+    border-radius: 50%;
+    width: 40px;
+    height: 40px;
+    animation: spin 1s linear infinite;
+    margin: 0 auto 1rem;
+}
+
+@keyframes spin {
+    0% { transform: rotate(0deg); }
+    100% { transform: rotate(360deg); }
+}
+
+.game-count {
+    background: var(--light-teal);
+    color: var(--deep-purple);
+    padding: 4px 12px;
+    border-radius: 12px;
+    font-size: 0.9rem;
+    font-weight: 600;
+}
+
+body.dark-theme .game-count {
+    background: var(--medium-blue);
+    color: var(--mint-cream);
+}
+`;
+
+// Inject loading styles
+const styleSheet = document.createElement('style');
+styleSheet.textContent = loadingStyles;
+document.head.appendChild(styleSheet);
 
 // Export functions for potential module use (if needed later)
 if (typeof module !== 'undefined' && module.exports) {

@@ -3,11 +3,11 @@ const games = [
     // Action Games (12)
     { id: 1, title: "Grand Theft Auto V", genre: "action", image: "/images/gtaV.jpg" },
     { id: 2, title: "Grand Thet Auto: Sand Anderas", genre: "action", image: "/images/sanandreas.jpeg" },
-    { id: 3, title: "Dragon Quest", genre: "action", image: "/images/dragon-quest.jpg" },
-    { id: 4, title: "Racing Extreme", genre: "action", image: "/images/racing-extreme.jpg" },
-    { id: 5, title: "Zombie Survival", genre: "action", image: "/images/zombie-survival.jpg" },
-    { id: 6, title: "Ninja Warrior", genre: "action", image: "/images/ninja-warrior.jpg" },
-    { id: 7, title: "Battle Royale", genre: "action", image: "/images/battle-royale.jpg" },
+    { id: 3, title: "Red Dead Redemption 2", genre: "action", image: "/images/reddead2.jpg" },
+    { id: 4, title: "Cyberpunk2077", genre: "action", image: "/images/cyberpunk2077.jpg" },
+    { id: 5, title: "Forza Horizon 5", genre: "action", image: "/images/forza5.jpg" },
+    { id: 6, title: "Ghost of Tsushima", genre: "action", image: "/images/ghostoftsushima.jpg" },
+    { id: 7, title: "Resident evil 4", genre: "action", image: "/images/residentevil4.jpg" },
     { id: 8, title: "Cyber Strike", genre: "action", image: "/images/cyber-strike.jpg" },
     { id: 9, title: "Space Marines", genre: "action", image: "/images/space-marines.jpg" },
     { id: 10, title: "Dragon Slayer", genre: "action", image: "/images/dragon-slayer.jpg" },
@@ -49,6 +49,7 @@ const popularGames = [1, 2, 3, 4, 13, 14, 25, 26];
 // Carousel functionality
 let currentSlide = 0;
 let autoSlideInterval;
+let isSearching = false;
 
 function createCarouselItem(game) {
     return `
@@ -105,6 +106,47 @@ function startAutoSlide() {
 
 function stopAutoSlide() {
     clearInterval(autoSlideInterval);
+}
+
+function showMainView() {
+    const carouselSection = document.querySelector('.carousel-section');
+    const genreSections = document.getElementById('genreSections');
+    
+    // Show popular games and all genres
+    carouselSection.style.display = 'block';
+    loadGenreSections();
+    isSearching = false;
+    
+    // Restart carousel if it was stopped
+    startAutoSlide();
+}
+
+function showSearchView(searchTerm, filteredGames) {
+    const carouselSection = document.querySelector('.carousel-section');
+    const genreSections = document.getElementById('genreSections');
+    
+    // Hide popular games during search
+    carouselSection.style.display = 'none';
+    isSearching = true;
+    stopAutoSlide();
+    
+    // Show search results
+    genreSections.innerHTML = `
+        <div class="genre-section">
+            <div class="genre-header">
+                <h2 class="genre-title">Search Results for "${searchTerm}"</h2>
+            </div>
+            <div class="genre-grid">
+                ${filteredGames.map(game => createGameCard(game)).join('')}
+            </div>
+            ${filteredGames.length === 0 ? `
+                <div style="text-align: center; padding: 2rem; color: var(--medium-gray);">
+                    <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
+                    <p>No games found matching "${searchTerm}"</p>
+                </div>
+            ` : ''}
+        </div>
+    `;
 }
 
 function createGameCard(game) {
@@ -197,33 +239,18 @@ function setupSearch() {
     
     // Perform search
     function performSearch() {
-        const searchTerm = searchInput.value.toLowerCase();
+        const searchTerm = searchInput.value.toLowerCase().trim();
+        
+        if (searchTerm === '') {
+            showMainView();
+            return;
+        }
+        
         const filteredGames = games.filter(game => 
             game.title.toLowerCase().includes(searchTerm)
         );
         
-        const genreSections = document.getElementById('genreSections');
-        if (searchTerm) {
-            genreSections.innerHTML = `
-                <div class="genre-section">
-                    <div class="genre-header">
-                        <h2 class="genre-title">Search Results for "${searchTerm}"</h2>
-                    </div>
-                    <div class="genre-grid">
-                        ${filteredGames.map(game => createGameCard(game)).join('')}
-                    </div>
-                    ${filteredGames.length === 0 ? `
-                        <div style="text-align: center; padding: 2rem; color: var(--medium-gray);">
-                            <i class="fas fa-search" style="font-size: 3rem; margin-bottom: 1rem;"></i>
-                            <p>No games found matching "${searchTerm}"</p>
-                        </div>
-                    ` : ''}
-                </div>
-            `;
-        } else {
-            loadGenreSections();
-        }
-        
+        showSearchView(searchTerm, filteredGames);
         searchBar.classList.remove('show');
         searchInput.value = '';
     }
@@ -261,10 +288,15 @@ function initTheme() {
     });
 }
 
-// Scroll to top function with animation
+// Scroll to top function with animation - UPDATED
 function scrollToTop() {
     const mainElement = document.querySelector('.main');
     mainElement.classList.add('smooth-scroll');
+    
+    // Reset to main view if we're searching
+    if (isSearching) {
+        showMainView();
+    }
     
     window.scrollTo({
         top: 0,
@@ -301,6 +333,45 @@ function scrollToGenre(genre) {
     }
 }
 
+// Enhanced dropdown hover functionality
+function setupDropdownHover() {
+    const dropdowns = document.querySelectorAll('.dropdown');
+    
+    dropdowns.forEach(dropdown => {
+        const content = dropdown.querySelector('.dropdown-content');
+        let hideTimeout;
+        
+        dropdown.addEventListener('mouseenter', function() {
+            clearTimeout(hideTimeout);
+            content.style.display = 'block';
+        });
+        
+        dropdown.addEventListener('mouseleave', function(e) {
+            // Check if we're moving to the dropdown content
+            const relatedTarget = e.relatedTarget;
+            if (relatedTarget && !content.contains(relatedTarget)) {
+                hideTimeout = setTimeout(() => {
+                    content.style.display = 'none';
+                }, 300); // 300ms delay
+            }
+        });
+        
+        content.addEventListener('mouseenter', function() {
+            clearTimeout(hideTimeout);
+        });
+        
+        content.addEventListener('mouseleave', function(e) {
+            // Check if we're moving back to the dropdown button
+            const relatedTarget = e.relatedTarget;
+            if (relatedTarget && !dropdown.contains(relatedTarget)) {
+                hideTimeout = setTimeout(() => {
+                    content.style.display = 'none';
+                }, 300); // 300ms delay
+            }
+        });
+    });
+}
+
 // Close dropdown when clicking outside
 function setupDropdownClose() {
     document.addEventListener('click', function(e) {
@@ -327,37 +398,6 @@ function setupImageErrorHandling() {
             }
         }
     }, true);
-}
-
-// Dropdown hover functionality with delay
-function setupDropdownHover() {
-    const dropdowns = document.querySelectorAll('.dropdown');
-    let hideTimeout;
-    
-    dropdowns.forEach(dropdown => {
-        const content = dropdown.querySelector('.dropdown-content');
-        
-        dropdown.addEventListener('mouseenter', function() {
-            clearTimeout(hideTimeout);
-            content.style.display = 'block';
-        });
-        
-        dropdown.addEventListener('mouseleave', function() {
-            hideTimeout = setTimeout(() => {
-                content.style.display = 'none';
-            }, 500); // 500ms delay
-        });
-        
-        content.addEventListener('mouseenter', function() {
-            clearTimeout(hideTimeout);
-        });
-        
-        content.addEventListener('mouseleave', function() {
-            hideTimeout = setTimeout(() => {
-                content.style.display = 'none';
-            }, 500); // 500ms delay
-        });
-    });
 }
 
 // Handle logo image error
@@ -409,14 +449,7 @@ document.addEventListener('DOMContentLoaded', function() {
             const gameId = gameCard.dataset.gameId;
             const game = games.find(g => g.id == gameId);
             if (game) {
-                // In a real application, this would navigate to the game page
-                // For now, we'll show an alert
                 alert(`Selected: ${game.title}\n\nThis would navigate to the game page in a real application.`);
-                
-                // Example of what you could do instead:
-                // window.location.href = `/game/${game.id}`;
-                // or
-                // showGameModal(game);
             }
         }
     });
